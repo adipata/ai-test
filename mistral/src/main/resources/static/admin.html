@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Certificate Alert Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .section-card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Certificate Alert Service</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Certificates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/alerts.html">Alerts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin.html">Admin</a>
+                    </li>
+                </ul>
+                <div id="userInfo" class="navbar-text">
+                    Not logged in
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Admin Dashboard</h2>
+
+        <!-- User Management -->
+        <div class="card section-card">
+            <div class="card-header">
+                User Management
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                    Add User
+                </button>
+                
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td colspan="4" class="text-center">Loading users...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Group Management -->
+        <div class="card section-card">
+            <div class="card-header">
+                Group Management
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addGroupModal">
+                    Add Group
+                </button>
+                
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="groupsTableBody">
+                            <tr>
+                                <td colspan="3" class="text-center">Loading groups...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert Configuration -->
+        <div class="card section-card">
+            <div class="card-header">
+                Alert Configuration
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="alertGroupSelect" class="form-label">Group</label>
+                            <select class="form-select" id="alertGroupSelect">
+                                <option value="">Select a group</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="thresholdDays" class="form-label">Expiration Threshold (days)</label>
+                            <input type="number" class="form-control" id="thresholdDays" value="30" min="1">
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="emailEnabled" checked>
+                            <label class="form-check-label" for="emailEnabled">Email Alerts Enabled</label>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="emailRecipients" class="form-label">Email Recipients (comma separated)</label>
+                            <input type="text" class="form-control" id="emailRecipients" 
+                                   placeholder="admin@example.com,team@example.com">
+                        </div>
+                        
+                        <button class="btn btn-primary" id="saveAlertConfigBtn">Save Configuration</button>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-info">
+                            <h5>Alert Configuration Help</h5>
+                            <p>Configure when and how alerts should be sent for certificate expirations.</p>
+                            <ul>
+                                <li><strong>Expiration Threshold:</strong> Number of days before expiration to trigger alerts</li>
+                                <li><strong>Email Alerts:</strong> Enable/disable email notifications</li>
+                                <li><strong>Email Recipients:</strong> Comma-separated list of email addresses to notify</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="mb-3">
+                            <label for="newUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="newUsername" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="newPassword" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="newUserGroup" class="form-label">Group</label>
+                            <select class="form-select" id="newUserGroup" required>
+                                <option value="">Select a group</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="newUserRole" class="form-label">Role</label>
+                            <select class="form-select" id="newUserRole" required>
+                                <option value="USER">User</option>
+                                <option value="MANAGER">Manager</option>
+                                <option value="ADMIN">Admin</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="newUserEnabled" checked>
+                            <label class="form-check-label" for="newUserEnabled">Enabled</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveUserBtn">Save User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Group Modal -->
+    <div class="modal fade" id="addGroupModal" tabindex="-1" aria-labelledby="addGroupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addGroupModalLabel">Add Group</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addGroupForm">
+                        <div class="mb-3">
+                            <label for="newGroupName" class="form-label">Group Name</label>
+                            <input type="text" class="form-control" id="newGroupName" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="newGroupDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="newGroupDescription" rows="3" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveGroupBtn">Save Group</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

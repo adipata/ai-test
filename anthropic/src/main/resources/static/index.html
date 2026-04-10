@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Cert Alert</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<header>
+  <h1>Cert Alert</h1>
+  <div id="user-bar" class="user-bar hidden">
+    <span>Signed in as <strong id="user-label"></strong></span>
+    <button id="logout-btn" type="button">Log out</button>
+  </div>
+</header>
+
+<main>
+  <!-- Login ------------------------------------------------------------- -->
+  <section id="login-view" class="card">
+    <h2>Sign in</h2>
+    <form id="login-form">
+      <label>Username <input id="username" autocomplete="username" required/></label>
+      <label>Password <input id="password" type="password" autocomplete="current-password" required/></label>
+      <button type="submit">Sign in</button>
+    </form>
+    <p class="hint">
+      Seeded users: <code>alice</code> / <code>bob</code> (group <em>security</em>),
+      <code>carol</code> / <code>dave</code> (group <em>platform</em>). Password: <code>password</code>.
+      Alice and Carol have the MANAGER role and can add certificates.
+    </p>
+    <p id="login-error" class="error"></p>
+  </section>
+
+  <!-- App --------------------------------------------------------------- -->
+  <section id="app-view" class="hidden">
+    <div class="row">
+      <div class="card">
+        <h2>Alert threshold</h2>
+        <p>Certificates expiring within the threshold are flagged.</p>
+        <form id="threshold-form">
+          <label>Days <input id="threshold-input" type="number" min="1" required/></label>
+          <button type="submit" id="threshold-save">Save</button>
+        </form>
+        <p id="threshold-msg" class="hint"></p>
+      </div>
+      <div class="card" id="add-card">
+        <h2>Add certificate</h2>
+        <form id="upload-form">
+          <label>Upload .cer / .pem file <input id="file-input" type="file" accept=".cer,.crt,.pem,.der"/></label>
+          <button type="submit">Upload</button>
+        </form>
+        <hr/>
+        <form id="fetch-form">
+          <label>Fetch from URL <input id="url-input" placeholder="www.google.com" required/></label>
+          <button type="submit">Fetch</button>
+        </form>
+        <p id="add-msg" class="hint"></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Expiring soon</h2>
+      <p id="alerts-summary" class="hint"></p>
+      <ul id="alerts-list"></ul>
+    </div>
+
+    <div class="card">
+      <h2>Certificates
+        <span class="sort-controls">
+          <label><input type="radio" name="order" value="desc" checked/> Expiry date descending</label>
+          <label><input type="radio" name="order" value="asc"/> Soonest first</label>
+        </span>
+      </h2>
+      <table id="cert-table">
+        <thead>
+          <tr>
+            <th>Alias</th>
+            <th>Subject</th>
+            <th>Issuer</th>
+            <th>Expires</th>
+            <th>Days left</th>
+            <th>Source</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
