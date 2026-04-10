@@ -2,6 +2,11 @@
 
 Test code generation on *Opus 4.6 with high effort* (Claude Code) and *Devstral 2* (123B) (Open Code).
 
+> **Prompt**
+> 
+> Act as a Java developer candidate for an option position.
+You have high flexibility to approach the design. Prove your capability to independently approach the functional specification. Some design details were intentionally omitted to measure your ability to organize yourself.
+
 ## Test description
 
 Create a service that alerts the operator when a TLS certificate is about to expire.
